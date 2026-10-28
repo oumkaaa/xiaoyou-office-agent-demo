@@ -4686,16 +4686,16 @@
 :root[data-ui="refined"] :is(.cv-composer,.composer-box,.la-compose) .followup-field textarea:focus{border:0!important;border-radius:0;background:transparent;box-shadow:none!important;outline:none}
 .la-compose>.followup-field{display:block}
 
-/* Shared TRAE composer: one content inset, one toolbar inset. */
-:root[data-ui="refined"] :is(.cv-composer,.composer-box,.la-compose){padding:0;border:1px solid #d9d9d9;border-radius:18px;background:#fff;box-shadow:0 3px 12px #00000004;overflow:visible;position:relative}
-:root[data-ui="refined"] :is(.cv-composer,.composer-box,.la-compose) textarea{display:block;width:100%;box-sizing:border-box;margin:0;padding:18px 20px;min-height:100px;border:0!important;border-radius:18px 18px 0 0;background:transparent!important;box-shadow:none!important;outline:none;font:inherit;font-size:14px;line-height:1.75;resize:none;color:#262626}
-:root[data-ui="refined"] :is(.cv-composer,.composer-box,.la-compose) textarea::placeholder{color:#999;opacity:1;font-weight:400}
-:root[data-ui="refined"] :is(.cv-composer,.composer-box,.la-compose) .followup-field textarea{min-height:118px;padding-bottom:38px!important}
-:root[data-ui="refined"] :is(.cv-composer-tools,.composer-toolbar){padding:10px 14px 12px;min-height:54px;box-sizing:border-box;margin:0;gap:6px}
-:root[data-ui="refined"] .la-compose>div:not(.followup-field):not(.voice-panel){padding:10px 14px 12px;margin:0}
+/* Compact shared composer: 56px writing area + 50px toolbar at desktop widths. */
+:root[data-ui="refined"] :is(.cv-composer,.composer-wrap .composer-box,.la-compose){padding:0;border:1px solid #d9d9d9;border-radius:18px;background:#fff;box-shadow:0 3px 12px #00000004;overflow:visible;position:relative}
+:root[data-ui="refined"] :is(.cv-composer,.composer-wrap .composer-box,.la-compose) textarea{display:block;width:100%;box-sizing:border-box;margin:0;padding:12px 16px 8px;height:64px;min-height:56px;max-height:200px;overflow-y:auto;border:0!important;border-radius:18px 18px 0 0;background:transparent!important;box-shadow:none!important;outline:none;font:inherit;font-size:14px;line-height:1.65;resize:none;color:#262626}
+:root[data-ui="refined"] :is(.cv-composer,.composer-wrap .composer-box,.la-compose) textarea::placeholder{color:#999;opacity:1;font-weight:400}
+:root[data-ui="refined"] :is(.cv-composer,.composer-wrap .composer-box,.la-compose) .followup-field textarea{height:88px;min-height:80px;padding-bottom:32px!important}
+:root[data-ui="refined"] :is(.cv-composer .cv-composer-tools,.composer-wrap .composer-toolbar){padding:6px 10px 10px;min-height:50px;box-sizing:border-box;margin:0;gap:6px}
+:root[data-ui="refined"] .la-compose>div:not(.followup-field):not(.voice-panel){padding:6px 10px 10px;margin:0}
 :root[data-ui="refined"] :is(.cv-context-chips,.ex-mention-chips,.composer-context):not(:empty){padding:12px 18px 0;margin:0}
 :root[data-ui="refined"] .composer-context:empty{display:none}
-:root[data-ui="refined"] .followup-accept{right:18px;bottom:8px;font-size:11px;color:#888}
+:root[data-ui="refined"] .followup-accept{right:12px;bottom:3px;font-size:11px;color:#888}
 :root[data-ui="refined"] .voice-trigger{display:inline-flex;flex:0 0 34px;align-items:center;justify-content:center;width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:#444;cursor:pointer;padding:0}
 :root[data-ui="refined"] .voice-trigger:hover{background:#f1f1f1;color:#222}
 :root[data-ui="refined"] .voice-trigger:focus-visible{outline:2px solid #777;outline-offset:2px}
@@ -4752,6 +4752,15 @@
 :root[data-ui="refined"] .composer-bottom{justify-content:flex-end}
 @media(max-width:600px){:root[data-ui="refined"] .composer-settings{gap:3px}:root[data-ui="refined"] .composer-settings .composer-setting{font-size:12px;padding:5px;gap:5px}}
 
+
+/* Grow with real text (and multiline suggestions), with a bounded scroll area.
+   Explicit heights above retain a compact fallback in older browsers. */
+@supports (field-sizing:content){
+ :root[data-ui="refined"] :is(.cv-composer,.composer-wrap .composer-box,.la-compose) textarea,
+ :root[data-ui="refined"] :is(.cv-composer,.composer-wrap .composer-box,.la-compose) .followup-field textarea{field-sizing:content;height:auto}
+}
+:root[data-ui="refined"] :is(.cv-composer-tools .d-send-button,.composer-toolbar .send-button){flex:0 0 34px;width:34px;height:34px;min-height:34px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+
 /* Official Feishu mark and a quiet, single-line entry matching the reference. */
 :root[data-ui="refined"] .home-remote-banner{order:0;display:flex;align-items:center;width:100%;box-sizing:border-box;margin:0 0 20px;min-height:60px;border:1px solid var(--tr-line);border-radius:18px;background:var(--tr-canvas);box-shadow:0 2px 4px #00000004,0 4px 12px #00000005;transition:border-color .16s,box-shadow .16s}
 :root[data-ui="refined"] .home-remote-banner:hover{border-color:#d8d8d8;box-shadow:0 3px 6px #00000005,0 6px 16px #00000006}
@@ -4763,6 +4772,14 @@
 @media(max-width:600px){:root[data-ui="refined"] .home-remote-link{padding:12px 14px;gap:10px;font-size:14px}:root[data-ui="refined"] .home-remote-close{margin-right:10px}}
 
 @container(max-width:600px){:root[data-ui="refined"] .cv-composer-tools .composer-settings{gap:4px}:root[data-ui="refined"] .cv-composer-tools .composer-setting{padding:5px;gap:5px;font-size:12px}:root[data-ui="refined"] .cv-composer-tools .d-model-choice{flex-shrink:1}:root[data-ui="refined"] .cv-composer-tools .d-model-choice>span:first-child{overflow:hidden;text-overflow:ellipsis}}
+
+/* In split view, keep model, microphone and send together on the second row. */
+@container(max-width:600px){
+ :root[data-ui="refined"] .cv-composer .cv-composer-tools{display:grid;grid-template-columns:minmax(0,1fr) 34px 34px;gap:4px 6px}
+ :root[data-ui="refined"] .cv-composer-tools .composer-settings{grid-column:1/-1}
+ :root[data-ui="refined"] .cv-composer-tools .d-composer-spacer{display:none}
+ :root[data-ui="refined"] .cv-composer-tools .d-model-choice{justify-self:end;max-width:100%;min-width:0}
+}
 
 :root[data-ui="refined"] .workspace-main{display:flex;flex:1;flex-direction:column;min-width:0;min-height:0}
 :root[data-ui="refined"] .workspace-main>.main-stage{flex:1;min-height:0;width:100%}

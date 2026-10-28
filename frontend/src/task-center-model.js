@@ -4,6 +4,8 @@ import {uid,newTask} from './core.js';
 import {SCENARIOS,seedOfficeTask,detectScenario,startRun,advance,repair,decide,execute,event,pause,recover} from './office-model.js';
 import {childRuns,isChild} from './child-work.js';
 export const centerRoute=r=>r==='task-center'||r==='schedules';
+export const TASK_FILTERS={all:'全部状态',running:'执行中',attention:'待处理',paused:'已暂停',problem:'异常',complete:'已完成'};
+export function taskMatchesStatus(t,status='all'){const p=t.office.phase;return status==='all'||status==='running'&&p==='running'||status==='attention'&&['ready','approved','review'].includes(p)||status==='paused'&&p==='paused'||status==='problem'&&p==='blocked'||status==='complete'&&p==='complete';}
 export const timeLabel=at=>new Date(at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
 export function jobKind(s){return s.center?.kind||(['document','mail'].includes(s.office?.trigger)?'event':'scheduled');}
 export const jobEnvironment=s=>(/本机|本地|local/.test(s.center?.environment||s.office?.environment||''))?'local':'cloud';

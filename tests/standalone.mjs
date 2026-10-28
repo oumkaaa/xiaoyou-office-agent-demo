@@ -87,6 +87,18 @@ import {initExpertLibrary} from '../frontend/src/expert-library.js';
 import {startRun,pause} from '../frontend/src/office-model.js';
 import {initPersonal} from '../frontend/src/personal.js';
 import {sendConversation as sendPersonalMessage} from '../frontend/src/personal-conversation.js';
+import {handleModuleNavigation} from '../frontend/src/module-navigation.js';
+
+test('standalone switches both navigation columns and restores the prior workspace through primary navigation',()=>{
+ const h=host(),c=h.app.ctx,s=h.app.state;
+ s.homeDraft='跨模块保留的草稿';s.sidebarLayout.projects[0].open=true;c.render();
+ function clickModule(module){handleModuleNavigation('module:open',{dataset:{module}},c);h.events.hashchange.forEach(fn=>fn());return h.nodes.get('#app').innerHTML;}
+ let html=clickModule('tasks');assert.match(html,/data-navigation-module="tasks"/);assert.match(html,/aria-label="任务中心导航"/);assert.doesNotMatch(html,/aria-label="会话与项目"/);
+ h.app.ui.tmTab='automations';c.render();
+ html=clickModule('market');assert.match(html,/aria-label="市场导航"/);assert.doesNotMatch(html,/aria-label="任务中心导航"|aria-label="会话与项目"/);
+ html=clickModule('workspace');assert.match(html,/aria-label="会话与项目"/);assert.match(html,/跨模块保留的草稿/);assert.equal(s.sidebarLayout.projects[0].open,true);
+ html=clickModule('tasks');assert.equal(h.app.ui.tmTab,'automations');assert.match(html,/触发方式/);
+});
 
 test('merged standalone renders new routes alongside existing configuration pages',()=>{
  const h=host();

@@ -11,6 +11,7 @@ import {initSidebarLayout,addNavigationProject,draftProject,assignDraftProject,h
 import {registerSkillOffer} from '../frontend/src/skill-discovery-model.js';
 import {createTaskIntakeMessage} from '../frontend/src/task-intake.js';
 import {sendMessage} from '../frontend/src/chat.js';
+import {navigationModule,rememberModuleRoute,captureModuleSidebar,restoreModuleSidebar,moduleCollapsed} from '../frontend/src/module-navigation.js';
 
 function root(entries={},cv=null){return {querySelectorAll:s=>entries[s]||[],querySelector:()=>cv};}
 test('returning to a task-center tab restores its reading position',()=>{
@@ -77,7 +78,7 @@ test('app render restores separate Agent-tab and task-tab conversations without 
  const document={documentElement:{dataset:{}},activeElement:null,querySelector:s=>dom.querySelector(s),querySelectorAll:s=>dom.querySelectorAll(s)};
  const app={set innerHTML(value){dom=view(agentThread(state,'personal').id);}};
  const blank=()=>'',noop=()=>{};
- const scope={state,ui,document,app,ctx:{},capturePageView,restorePageView,restorePageConversation,captureForms:()=>[],restoreForms:noop,
+ const scope={state,ui,document,app,ctx:{},capturePageView,restorePageView,restorePageConversation,navigationModule,rememberModuleRoute,captureModuleSidebar,restoreModuleSidebar,moduleCollapsed,captureForms:()=>[],restoreForms:noop,
   visitPageTab:tabs=>tabs,storePageTabs:noop,syncAgentThreads,reconcileConversation:()=>false,applyTheme:noop,
   renderLocalAgentWorkspace:blank,renderTaskCenter:blank,renderMarketPage:blank,renderExperts:blank,
   renderAgentConversation(){if(ui.route.startsWith('chat/'))focusAgentTask(state,state.tasks.find(t=>t.id===ui.route.slice(5)));return 'conversation';},

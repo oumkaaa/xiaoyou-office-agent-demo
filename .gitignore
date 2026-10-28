@@ -20,6 +20,8 @@ screenshots/*
 !screenshots/v12-event-tasks-1440.png
 !screenshots/v27-home-1280.png
 !screenshots/v27-conversation-1280.png
+!screenshots/v28-task-navigation.png
+!screenshots/v28-market-navigation.png
 
 # Local prototype workbench
 .backups/

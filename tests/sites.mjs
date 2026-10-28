@@ -4,6 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
+import {createTaskIntakeMessage} from '../frontend/src/task-intake.js';
 import {initialState,newTask,esc,icon} from '../frontend/src/core.js';
 import {initCatalog} from '../frontend/src/catalog.js';
 import {initWorkspace} from '../frontend/src/workspace.js';
@@ -30,7 +31,7 @@ function context(state,route='sites'){
  ctx.validateTask=task=>validateSiteTask(state,task);
  const source=readFileSync(new URL('../frontend/src/app.js',import.meta.url),'utf8'),start=source.indexOf('function startTask('),end=source.indexOf('\nfunction continueTask(',start);
  assert.ok(start>=0&&end>start,'the real task boundary must remain discoverable');
- const startRealTask=runInNewContext('('+source.slice(start,end)+')',{state,newTask,structuredClone,validateTeamTask,validateSiteTask,collectMemorySnapshot,toast:text=>ctx.toast(text),save:()=>ctx.save(),go:route=>ctx.go(route)});
+ const startRealTask=runInNewContext('('+source.slice(start,end)+')',{state,ui:ctx.ui,newTask,structuredClone,validateTeamTask,validateSiteTask,collectMemorySnapshot,createTaskIntakeMessage,toast:text=>ctx.toast(text),save:()=>ctx.save(),go:route=>ctx.go(route)});
  ctx.startTask=(prompt,options={})=>{const id=startRealTask(prompt,options);if(id)ctx.starts.push({prompt,options:clone(options)});return id;};
  return ctx;
 }

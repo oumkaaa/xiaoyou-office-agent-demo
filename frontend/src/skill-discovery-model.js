@@ -37,21 +37,27 @@ export function installDiscoverySkill(state,id,{moment='entry',taskId=null}={}){
 export function recordSkillDetail(state,id,moment){if(discoverySkill(id))log(state,'detail_viewed',{skillId:id,moment});}
 const workflow=t=>DISCOVERY_SKILLS.find(s=>s.strong.test(t.prompt||''))?.scene||t.office?.scenario;
 export function distillationCandidate(state,t,now=Date.now()){
-  if(t?.office?.phase!=='complete')return null;const d=initSkillDiscovery(state),scene=workflow(t),key='user:'+scene;
-  const peers=state.tasks.filter(x=>x.office?.phase==='complete'&&workflow(x)===scene);
+  if(!t||(t.office?t.office.phase!=='complete':t.status!=='complete'))return null;const d=initSkillDiscovery(state),scene=workflow(t),demoGroup=t.skillDistillationDemoGroup||'',key=demoGroup?'demo:'+demoGroup+':'+scene:'user:'+scene;if(!scene)return null;
+  // Synthetic demonstration records never increase a user's completion count.
+  const peers=state.tasks.filter(x=>(x.office?x.office.phase==='complete':x.status==='complete')&&workflow(x)===scene&&(x.skillDistillationDemoGroup||'')===demoGroup);
   if(peers.length<3||d.distillDismissed[key]>now)return null;
   return {key,scene,count:peers.length,taskIds:peers.map(x=>x.id),savedId:d.distilled[key]||null};
 }
 export function distillationSpec(t){
   const title=({weekly:'经营复盘周报',slides:'汇报 PPT 制作',meeting:'会议知识沉淀',review:'经营复盘周报',proposal:'项目评审准备',reconcile:'订单异常复核',builder:'业务助手试跑'})[workflow(t)]||'我的工作流程';
-  const scope=t.office.scope.replace(/\d{4}-\d{2}-\d{2}\s*(?:至|—|~|到)\s*(?:\d{4}-)?\d{2}-\d{2}/g,'【本次时间范围】');
-  return {name:'我的'+title,description:'复用已确认的资料口径、处理步骤与交付检查。',content:`## 什么时候使用\n${t.prompt}\n\n## 所需资料与口径\n${scope}\n每次重新确认本次时间范围，不固化历史示例周期。\n\n## 工作方法\n${t.office.steps.filter(s=>!['check','lead','deliver'].includes(s.id)).map((s,i)=>`${i+1}. ${s.title}：${s.output}`).join('\n')}\n\n## 交付前检查\n核对事实、来源、指标计算和输出要求；Lead 交付前自核。\n\n## 人工确认\n发送、写回和发布前，列出对象、内容与版本，由用户按次确认。`};
+  const confirmed=t.skillDistillationConfirmedWorkflow,lines=value=>Array.isArray(value)?value.filter(x=>typeof x==='string'&&x.trim()).map(x=>x.trim()):[];
+  if(confirmed?.confirmed===true&&typeof confirmed.whenToUse==='string'&&confirmed.whenToUse.trim()){
+    const scope=lines(confirmed.scope),steps=lines(confirmed.steps),checks=lines(confirmed.checks);
+    if(scope.length&&steps.length&&checks.length)return {name:'我的'+title,description:'复用已确认的资料口径、处理步骤与交付检查。',content:`## 什么时候使用\n${confirmed.whenToUse.trim()}\n\n## 所需资料与口径\n${scope.map(x=>'- '+x).join('\n')}\n每次重新确认本次时间范围，不固化历史示例周期。\n\n## 工作方法\n${steps.map((x,i)=>`${i+1}. ${x}`).join('\n')}\n\n## 交付前检查\n${checks.map(x=>'- '+x).join('\n')}\n\n## 人工确认\n发送、写回和发布前，列出对象、内容与版本，由用户按次确认。`};
+  }
+  const scope=(t.office?.scope||'按本次任务确认资料与时间范围').replace(/\d{4}-\d{2}-\d{2}\s*(?:至|—|~|到)\s*(?:\d{4}-)?\d{2}-\d{2}/g,'【本次时间范围】');
+  return {name:'我的'+title,description:'复用已确认的资料口径、处理步骤与交付检查。',content:`## 什么时候使用\n${t.prompt}\n\n## 所需资料与口径\n${scope}\n每次重新确认本次时间范围，不固化历史示例周期。\n\n## 工作方法\n${(t.office?.steps||[{id:'prepare',title:'梳理资料',output:'确认输入与口径'},{id:'produce',title:'整理成果',output:'按工作方法生成初稿'}]).filter(s=>!['check','lead','deliver'].includes(s.id)).map((s,i)=>`${i+1}. ${s.title}：${s.output}`).join('\n')}\n\n## 交付前检查\n核对事实、来源、指标计算和输出要求；Lead 交付前自核。\n\n## 人工确认\n发送、写回和发布前，列出对象、内容与版本，由用户按次确认。`};
 }
 export function saveDistilledSkill(state,t,values){
   const candidate=distillationCandidate(state,t);if(!candidate)return {error:'需要至少三次已完成的同类工作'};
   if(!values.name?.trim()||!values.description?.trim()||!values.content?.trim())return {error:'请补全名称、简介和工作方法'};
   const d=initSkillDiscovery(state),existing=(state.catalog.skills||[]).find(s=>s.id===candidate.savedId);
   if(existing)return {skill:existing,already:true};
-  const skill={id:uid('distilled-skill'),name:values.name.trim(),description:values.description.trim(),content:values.content.trim(),scope:'全局',enabled:false,installed:true,custom:true,reviewStatus:'pending',visibility:'private',source:'从已完成工作沉淀',sourceTaskIds:candidate.taskIds,version:'v1'};
+  const skill={id:uid('distilled-skill'),name:values.name.trim(),description:values.description.trim(),content:values.content.trim(),scope:'全局',enabled:false,installed:true,custom:true,reviewStatus:'pending',visibility:'private',source:t.skillDistillationDemoGroup?'从合成示例工作沉淀':'从已完成工作沉淀',demoSource:!!t.skillDistillationDemoGroup,sourceTaskIds:candidate.taskIds,version:'v1'};
   state.catalog.skills.push(skill);d.distilled[candidate.key]=skill.id;log(state,'distilled',{moment:'after_completion',skillId:skill.id,sourceTaskIds:candidate.taskIds,reviewStatus:'pending'});return {skill,already:false};
 }

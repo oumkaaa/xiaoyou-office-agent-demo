@@ -1,4 +1,6 @@
-.context-shortcuts{display:flex;align-items:center;gap:12px;margin:0 2px 12px;min-width:0;font-family:inherit}
+.context-shortcuts{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin:0 2px 12px;min-width:0;font-family:inherit}
+.context-shortcuts-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;font-size:11px;line-height:1.7;color:var(--tr-body,#63636c)}
+.context-shortcuts-heading small{font:inherit;color:var(--tr-muted,#757575)}
 .context-shortcuts-label{font-size:11px;line-height:1.7;color:#929299;white-space:nowrap;flex-shrink:0}
 .context-shortcuts-items{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
 .context-shortcut{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:7px 10px;min-height:31px;border:1px solid #e8e8ec;border-radius:9px;background:#fafafb;color:#63636c;font:inherit;font-size:12px;line-height:1.4;cursor:pointer;white-space:nowrap;box-shadow:none;transition:background .12s,border-color .12s,color .12s}
@@ -6,7 +8,7 @@
 .context-shortcut:hover{background:#f2f5fa;border-color:#d6e2f1;color:#3c6eaa}
 .context-shortcut:hover svg{color:#6b92bf}
 .context-shortcut:focus-visible{outline:2px solid #a7bfdc;outline-offset:3px}
-.home-page .context-shortcuts{margin:0 4px 13px;gap:14px}
+.home-page .context-shortcuts{margin:0 4px 13px;gap:8px}
 .home-page .context-shortcut{padding:8px 12px;font-size:12px;border-radius:10px;background:#fff}
 .cv-composer-wrap .context-shortcuts{gap:10px;margin-bottom:10px}
 @media(max-width:1300px){.cv-composer-wrap .context-shortcuts{gap:8px}

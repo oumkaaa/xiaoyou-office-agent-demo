@@ -3,7 +3,7 @@ import {esc,icon} from './core.js';
 
 const entries={personal:['小悠','sparkles'],home:['新建任务','new'],teams:['团队空间','teams'],plugins:['插件','plugin'],skills:['技能','bolt'],mcp:['MCP','code'],experts:['助理','expert'],'expert-config':['助理管理','sliders'],'task-center':['任务中心','list'],schedules:['任务中心','list'],remote:['远程控制','remote'],sites:['站点','globe'],knowledge:['知识库','book'],insights:['工作洞察','sun'],'ai-plan':['AI Plan 配置','sparkles']};
 const storageKey='xiaoyou-page-tabs-v1';
-export function pageTabKey(route){if(route.startsWith('personal/'))return 'personal';if(['plugins','skills','mcp'].includes(route))return 'plugins';if(route==='schedules')return 'task-center';if(route.startsWith('settings/'))return 'settings';if(route.startsWith('team/'))return route.split('/').slice(0,2).join('/');return route;}
+export function pageTabKey(route){if(route.startsWith('personal/'))return 'personal';if(['experts','expert-config','plugins','skills','mcp'].includes(route))return 'market';if(route==='schedules')return 'task-center';if(route.startsWith('settings/'))return 'settings';if(route.startsWith('team/'))return route.split('/').slice(0,2).join('/');return route;}
 export function pageTabInfo(state,route){
  if(entries[route])return {label:entries[route][0],icon:entries[route][1]};
  const [kind,id]=route.split('/');

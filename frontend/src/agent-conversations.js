@@ -1,5 +1,6 @@
 // Persistent Agent conversations reference tasks; tasks still own execution and approvals.
 import {uid} from './core.js';
+import {taskIntakeText} from './task-intake.js';
 import {initExpertLibrary} from './expert-library.js';
 const personal={id:'personal',name:'小悠',description:'一起想清楚目标，连接资料与助理，把工作推进到交付',icon:'sparkles',source:'个人智能体',version:'v1',pinned:true};
 const conversationTitle=text=>String(text||'').replace(/\s+/g,' ').trim().slice(0,32)||'新对话';
@@ -23,8 +24,9 @@ export function syncAgentThreads(state){const o=state.office;if(!o)return false;
     if(!o.agents.some(a=>a.id===task.office.agentId))task.office.agentId='personal';
     const id=task.office.agentId,thread=taskConversation(state,task);
     if(welcome(state,thread))changed=true;
+    if(!thread.messages.some(m=>m.role==='user')){const greeting=thread.messages.find(m=>m.kind==='welcome');if(greeting&&greeting.at>=task.createdAt){greeting.at=task.createdAt-1;changed=true;}}
     const goal=addAgentMessage(state,id,'user',task.prompt,{conversationId:thread.id,key:`task:${task.id}:goal`,taskId:task.id,kind:'goal',at:task.createdAt});if(goal)changed=true;
-    const introText='我会先核对目标和现有资料，再安排几个子任务分别处理，最后统一检查和汇总。你可以查看分工，也可以随时补充要求。外部操作会另行确认。',introKey=`task:${task.id}:intro`,introMessage=thread.messages.find(m=>m.key===introKey);if(introMessage){if(introMessage.text!==introText){introMessage.text=introText;changed=true;}}else if(addAgentMessage(state,id,'assistant',introText,{key:introKey,conversationId:thread.id,taskId:task.id,kind:'task',at:task.createdAt+1}))changed=true;
+    const introText=task.intake?taskIntakeText(task):'我会先核对目标和现有资料，再安排几个子任务分别处理，最后统一检查和汇总。你可以查看分工，也可以随时补充要求。外部操作会另行确认。',introKey=`task:${task.id}:intro`,introMessage=thread.messages.find(m=>m.key===introKey);if(introMessage){if(introMessage.text!==introText){introMessage.text=introText;changed=true;}}else if(addAgentMessage(state,id,'assistant',introText,{key:introKey,conversationId:thread.id,taskId:task.id,kind:'task',at:task.createdAt+1}))changed=true;
     for(const [index,m] of task.messages.entries()){if(index===0||m.role!=='user')continue;if(addAgentMessage(state,id,'user',m.text,{key:`task:${task.id}:message:${index}`,conversationId:thread.id,taskId:task.id,at:m.time||task.createdAt+index+2,author:m.text.startsWith('陈语')?'陈语 · 示例同事':undefined}))changed=true;}
     for(const e of task.office.events){if(e.conversationHandled||['goal','step','template'].includes(e.kind)||e.title==='生成小队计划'||e.title==='已退回局部修正')continue;let text=`${e.title}。${e.detail||''}`;
       if(e.kind==='run')text='我已按当前计划开始处理。进度和各角色的交付物会出现在右侧；你可以继续补充要求。';
@@ -38,7 +40,7 @@ export function syncAgentThreads(state){const o=state.office;if(!o)return false;
 
     if(!thread.initialized)thread.activeTaskId=task.id;
   }
-  for(const thread of Object.values(o.threads)){thread.initialized=true;thread.messages.sort((a,b)=>a.at-b.at);if(thread.activeTaskId&&!state.tasks.some(t=>t.id===thread.activeTaskId&&t.office?.agentId===thread.agentId&&(t.office.conversationId||thread.agentId)===thread.id)){thread.activeTaskId=null;changed=true;}}
+  for(const thread of Object.values(o.threads)){const firstUser=thread.messages.filter(m=>m.role==='user').sort((a,b)=>a.at-b.at)[0],greeting=thread.messages.find(m=>m.kind==='welcome');if(firstUser&&greeting&&greeting.at>=firstUser.at){greeting.at=firstUser.at-1;changed=true;}thread.initialized=true;thread.messages.sort((a,b)=>a.at-b.at);if(thread.activeTaskId&&!state.tasks.some(t=>t.id===thread.activeTaskId&&t.office?.agentId===thread.agentId&&(t.office.conversationId||thread.agentId)===thread.id)){thread.activeTaskId=null;changed=true;}}
   o.conversationVersion=2;return changed;
 }
 export function classifyAgentMessage(text,task){const value=text.trim();if(/^(按计划执行|采用计划|开始执行|开始吧|执行计划|开始处理)[。！!\s]*$/.test(value)&&task)return 'start';if(/^(暂停|先暂停|停一下)[。！!\s]*$/.test(value)&&task)return 'pause';if(/^(继续|继续执行|恢复执行|恢复连接)[。！!\s]*$/.test(value)&&task)return 'resume';if(/^(同意|批准|确认写回|确认发布|发出去)[。！!\s]*$/.test(value)&&task)return 'approval';if(/你能|什么能力|怎么用|你好|能做什么/.test(value))return 'about';if(task&&/为什么|资料来源|数据来源|用的什么|什么口径|进度|到哪一步|用了.*记忆/.test(value))return 'question';if(task&&/补充|增加|调整|修改|改成|改为|先给|先说|请用|口径|记住|这份|这段/.test(value))return 'refine';if(/调研|研究|复盘|分析|核对|方案|整理|报告|搭建|制作|生成|助手/.test(value))return 'goal';return 'chat';}

@@ -33,8 +33,9 @@ ok(matchDiscoverySkill(state,'生成经营周报',1002+86400001)?.skill.id==='di
 ok(!renderAgentConversation(c).includes('aria-label="Skill 建议"'),'ignored suggestion disappears');
 const second=task(state,'整理会议纪要，生成待办');registerSkillOffer(state,'personal',second.prompt,second.id);
 inputConversation({dataset:{live:'cv:draft',agent:'personal'},value:'我继续补充要求'},c);
-ok(state.skillDiscovery.offers[second.id].status==='ignored','continuing to type ignores the suggestion');
-ok(agentThread(state,'personal').draft==='我继续补充要求','ignoring retains user text');
+ok(state.skillDiscovery.offers[second.id].status==='pending','editing a draft keeps the task Skill recommendation available');
+ok(agentThread(state,'personal').draft==='我继续补充要求','editing retains user text');
+ok(renderAgentConversation(c).includes('aria-label="Skill 建议"'),'typing leaves the Skill recommendation visible');
 const invalid=installDiscoverySkill(state,'not-in-pool');ok(!!invalid.error,'installation validates whitelist in code');
 ok(state.catalog.skills.length===skillCount,'invalid candidate cannot enter installed skills');
 const adopted=installDiscoverySkill(state,'discover-weekly',{moment:'in_conversation',taskId:first.id});

@@ -18,6 +18,8 @@ screenshots/*
 !screenshots/v15-expert-sidebar-1280.png
 !screenshots/v12-task-board-1440.png
 !screenshots/v12-event-tasks-1440.png
+!screenshots/v27-home-1280.png
+!screenshots/v27-conversation-1280.png
 
 # Local prototype workbench
 .backups/
@@ -27,3 +29,7 @@ __pycache__/
 *.log
 frontend/design-variants/archive/
 frontend/design-variants/reference-package/
+
+# Local review snapshots and source screenshots; tracked history stays in Git.
+/versions/*/
+/references/

@@ -97,3 +97,9 @@
 .sr-draft-detail pre{font-family:inherit;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;background:var(--sr-fill);border:1px solid var(--sr-line);border-radius:12px;padding:18px;max-height:390px;overflow:auto}
 .sr-draft-detail>.sr-draft-boundary{padding-top:0}
 @media(max-width:760px){.sr-offer{align-items:flex-start;flex-wrap:wrap}.sr-offer>.sr-symbol{width:32px;height:32px}.sr-offer-copy{flex-basis:calc(100% - 50px)}.sr-offer>.sr-button{margin-left:44px}.sr-distill{flex-wrap:wrap}.sr-distill>.sr-symbol{width:32px;height:32px}.sr-distill>div{flex-basis:calc(100% - 50px)}.sr-distill>.sr-button{margin-left:46px}.sr-drafts>header{align-items:flex-start;flex-wrap:wrap;gap:6px}.sr-draft-row{flex-wrap:wrap}.sr-draft-row>small{font-size:11px}.sr-detail>footer{flex-wrap:wrap}.sr-detail>footer>.sr-button{margin-left:auto}}
+
+.sr-applied{display:flex;align-items:center;gap:6px;margin:12px 0;color:var(--tr-muted,#737373);font-size:12px}.sr-applied .name{color:inherit}.sr-reusable{opacity:.9}
+
+/* A conversation already provides spacing before its proactive method card. */
+.cv-message-stack>.sr-distill.sr-conversation-method{margin:0 0 4px;padding:14px}
+.sr-conversation-method .sr-sample-note{margin-top:6px}

@@ -1,0 +1,215 @@
+/* Doubao reference study: scoped to conversation surfaces, leaving home and navigation intact. */
+html:root[data-ui="refined"] :is(.cv-layout,.conversation-page){
+  --db-ink:#252525;
+  --db-muted:#929299;
+  --db-line:#e8e8ec;
+  --db-canvas:#fff;
+  --db-soft:#f6f6f8;
+  --db-user:#282828;
+  --db-user-ink:#fff;
+  --db-green-bg:#f0faf3;--db-green:#329268;
+  --db-cyan-bg:#eff9fc;--db-cyan:#328fae;
+  --db-pink-bg:#fcf2fa;--db-pink:#b86caf;
+  --db-violet-bg:#f5f1fd;--db-violet:#8768bb;
+  --db-amber-bg:#fff7ec;--db-amber:#b88842;
+  color:var(--db-ink);
+  background:var(--db-canvas);
+}
+html:root[data-ui="refined"] .cv-layout .cv-conversation,
+html:root[data-ui="refined"] .conversation-page .conversation-column{background:var(--db-canvas)}
+
+/* Preserve the shared content rail while making the title and summary toggle clear. */
+html:root[data-ui="refined"] .cv-layout .cv-chat-header{
+  height:70px;
+  min-height:70px;
+  padding-block:12px;
+  gap:12px;
+  background:var(--db-canvas);
+  border-bottom-color:var(--db-line);
+}
+html:root[data-ui="refined"] .cv-layout .d-conversation-title>button{color:var(--db-ink)}
+html:root[data-ui="refined"] .cv-layout .d-conversation-title strong{
+  color:var(--db-ink);
+  font-size:17px;
+  font-weight:600;
+  line-height:1.5;
+  letter-spacing:0;
+}
+html:root[data-ui="refined"] .cv-layout .d-conversation-title>button>svg{color:#b4b4bc}
+html:root[data-ui="refined"] .cv-layout .cv-chat-header .d-conversation-title p{
+  color:var(--db-muted);
+  font-size:11px;
+  line-height:1.4;
+  margin-top:4px;
+}
+html:root[data-ui="refined"] .cv-layout .cv-chat-header>div:last-child{flex:0 0 auto;gap:5px}
+html:root[data-ui="refined"] .cv-layout .cv-chat-header>div:last-child>.d-header-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:30px;
+  height:30px;
+  min-height:30px;
+  padding:5px;
+  color:#74747c;
+  background:transparent;
+  border:0;
+  border-radius:7px;
+}
+html:root[data-ui="refined"] .cv-layout .cv-chat-header>div:last-child>.d-header-icon:hover{background:var(--db-soft);color:var(--db-ink)}
+html:root[data-ui="refined"] .conversation-page .conversation-header{background:var(--db-canvas);border-bottom-color:var(--db-line)}
+html:root[data-ui="refined"] .conversation-page .conversation-title h2{color:var(--db-ink);font-size:16px;font-weight:600}
+
+/* Text is the primary surface. Only the user's own messages form dark bubbles. */
+html:root[data-ui="refined"] .cv-layout .cv-message-stack{gap:25px}
+html:root[data-ui="refined"] .cv-layout .cv-message-text{
+  color:var(--db-ink);
+  font-size:16px;
+  line-height:1.85;
+  letter-spacing:.02px;
+  overflow-wrap:anywhere;
+}
+html:root[data-ui="refined"] .cv-layout .cv-message.assistant .cv-message-body{background:transparent;border:0;box-shadow:none}
+html:root[data-ui="refined"] .cv-layout .cv-message.user .cv-message-body{
+  background:var(--db-user);
+  color:var(--db-user-ink);
+  border:0;
+  border-radius:18px;
+  padding:14px 18px;
+  box-shadow:none;
+}
+html:root[data-ui="refined"] .cv-layout .cv-message.user .cv-message-text{color:var(--db-user-ink);font-size:15.5px;line-height:1.85}
+html:root[data-ui="refined"] .cv-layout .cv-message.user .ex-message-mentions>span{background:#444448;color:#f1f1f4;border:0}
+html:root[data-ui="refined"] .cv-layout .cv-message.user .d-expand-user{color:#c3c3ca}
+html:root[data-ui="refined"] .conversation-page .message.assistant .message-content{color:var(--db-ink);font-size:16px;line-height:1.85}
+html:root[data-ui="refined"] .conversation-page .message.user .message-content{
+  color:var(--db-user-ink);
+  background:var(--db-user);
+  border:0;
+  border-radius:18px;
+  font-size:15.5px;
+  line-height:1.85;
+  padding:14px 18px;
+}
+
+/* Restore the reference's pastel child-Agent pills and translucent colored orbs. */
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chips{gap:8px;margin:19px 0 16px}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:31px;
+  padding:6px 11px 6px 8px;
+  border:0;
+  border-radius:24px;
+  box-shadow:none;
+  font-size:13px;
+  font-weight:400;
+  line-height:1.5;
+}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip.green{background:var(--db-green-bg);color:var(--db-green)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip.cyan{background:var(--db-cyan-bg);color:var(--db-cyan)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip.pink{background:var(--db-pink-bg);color:var(--db-pink)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip.violet{background:var(--db-violet-bg);color:var(--db-violet)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip.amber{background:var(--db-amber-bg);color:var(--db-amber)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip:hover{filter:brightness(.98)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip>.d-orb{
+  display:inline-block;
+  width:17px;
+  height:17px;
+  min-width:17px;
+  border:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,#e8fff0 6%,#92e6b6 51%,#78bdd7);
+  box-shadow:inset 1px 1px 3px #ffffffb3,inset -2px -2px 4px #ffffff66;
+}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip>.d-orb.cyan{background:linear-gradient(135deg,#e7ffff,#8be4ee 52%,#73bbec)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip>.d-orb.pink{background:linear-gradient(135deg,#fff0fc,#e9b1e7 52%,#beb6ef)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip>.d-orb.violet{background:linear-gradient(135deg,#f1eaff,#c8b0ef 52%,#9ec9ed)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip>.d-orb.amber{background:linear-gradient(135deg,#ffeedb,#edc6a6 52%,#c5d5a3)}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chip>.d-orb>svg{display:none}
+html:root[data-ui="refined"] .cv-layout .cv-chat-scroll .d-agent-chips>small{color:var(--db-muted);font-size:11px}
+
+/* Execution is a subdued reading aid with a light dashed divider. */
+html:root[data-ui="refined"] .cv-layout .d-run-meta{
+  color:var(--db-muted);
+  font-size:12px;
+  line-height:1.7;
+  gap:8px 13px;
+  border-bottom:1px dashed #dddde3;
+  padding-bottom:14px;
+  margin-bottom:17px;
+}
+html:root[data-ui="refined"] .cv-layout .d-run-meta>span+span{color:var(--db-muted)}
+html:root[data-ui="refined"] .cv-layout .d-process-line{
+  min-height:24px;
+  padding:2px 0;
+  background:transparent;
+  border:0;
+  color:var(--db-muted);
+  font-size:12px;
+  line-height:1.7;
+  box-shadow:none;
+}
+html:root[data-ui="refined"] .cv-layout .d-process-line>svg{color:#b1b1ba}
+html:root[data-ui="refined"] .cv-layout .d-process-line:hover{background:transparent;color:#62626b}
+html:root[data-ui="refined"] .cv-layout .d-task-outline{color:#62626a;font-size:14px;line-height:1.85;margin-block:15px}
+html:root[data-ui="refined"] .cv-layout .d-task-outline strong{color:#44444b;font-weight:500}
+html:root[data-ui="refined"] .cv-layout .d-task-outline span{color:#8a8a94}
+html:root[data-ui="refined"] .cv-layout .cv-running{color:var(--db-muted);font-size:13px}
+html:root[data-ui="refined"] .conversation-page .inline-run-record{background:transparent;border-color:var(--db-line);border-style:dashed}
+html:root[data-ui="refined"] .conversation-page :is(.inline-run-label,.inline-run-summary,.inline-run-detail){color:var(--db-muted)}
+
+/* Small, consistent tools do not expand each assistant turn. */
+html:root[data-ui="refined"] .cv-layout .d-message-tools{min-height:22px;gap:8px;margin-top:6px;opacity:1}
+html:root[data-ui="refined"] .cv-layout .d-message-tools .btn{
+  width:22px;
+  height:22px;
+  min-height:22px;
+  padding:2px;
+  border:0;
+  background:transparent;
+  color:#aaaab3;
+  box-shadow:none;
+}
+html:root[data-ui="refined"] .cv-layout .d-message-tools .btn:hover{background:var(--db-soft);color:#62626b}
+html:root[data-ui="refined"] .cv-layout .d-message-tools time{color:#aaaab3;font-size:10px}
+html:root[data-ui="refined"] .conversation-page .message-actions .icon-btn{color:#aaaab3;width:24px;height:24px}
+html:root[data-ui="refined"] .conversation-page .message-actions>span{color:#aaaab3;font-size:10px}
+
+/* Retain composer geometry; only normalize its colors to the white chat canvas. */
+html:root[data-ui="refined"] .cv-layout .cv-composer-wrap{background:var(--db-canvas)}
+html:root[data-ui="refined"] .cv-layout .cv-composer{background:var(--db-canvas);border-color:#dedee4;box-shadow:0 3px 14px #14141b06}
+html:root[data-ui="refined"] .cv-layout .cv-composer textarea{color:var(--db-ink);background:transparent}
+html:root[data-ui="refined"] .cv-layout .cv-input-hint{color:#aaaab3}
+
+html:root[data-ui="refined"] .cv-layout.db-long-example .cv-message-stack{gap:20px}
+@media(max-width:760px){
+  html:root[data-ui="refined"] .cv-layout .cv-chat-header{height:64px;min-height:64px;padding-block:9px}
+  html:root[data-ui="refined"] .cv-layout .d-conversation-title strong{font-size:16px}
+  html:root[data-ui="refined"] .cv-layout .cv-message-text,
+  html:root[data-ui="refined"] .conversation-page .message.assistant .message-content{font-size:15.5px;line-height:1.85}
+  html:root[data-ui="refined"] .cv-layout .cv-message.user .cv-message-text,
+  html:root[data-ui="refined"] .conversation-page .message.user .message-content{font-size:15px}
+  html:root[data-ui="refined"] .cv-layout .cv-message.user .cv-message-body{padding:13px 16px}
+}
+
+html:root[data-ui="refined"][data-theme="dark"] :is(.cv-layout,.conversation-page){
+  --db-ink:#e9e9ee;
+  --db-muted:#9b9ba6;
+  --db-line:#3b3b43;
+  --db-canvas:#222225;
+  --db-soft:#303036;
+  --db-user:#3c3c42;
+  --db-user-ink:#fafafa;
+  --db-green-bg:#223c30;--db-green:#9ed9b5;
+  --db-cyan-bg:#233941;--db-cyan:#9dd4e5;
+  --db-pink-bg:#3f2d3e;--db-pink:#e4b1dc;
+  --db-violet-bg:#342e47;--db-violet:#ccb8ec;
+  --db-amber-bg:#41372a;--db-amber:#e3c18d;
+}
+html:root[data-ui="refined"][data-theme="dark"] .cv-layout .d-run-meta{border-bottom-color:var(--db-line)}
+html:root[data-ui="refined"][data-theme="dark"] .cv-layout .d-task-outline{color:#c3c3cd}
+html:root[data-ui="refined"][data-theme="dark"] .cv-layout .d-task-outline strong{color:var(--db-ink)}
+html:root[data-ui="refined"][data-theme="dark"] .cv-layout .cv-composer{border-color:var(--db-line);box-shadow:none}
+html:root[data-ui="refined"][data-theme="dark"] .cv-layout .cv-chat-header>div:last-child>.d-header-icon{color:#b7b7c2}

@@ -9,6 +9,9 @@ import {initCatalog, renderCatalog, handleCatalog} from '../frontend/src/catalog
 import {isPluginConnected} from '../frontend/src/account-state.js';
 import {initWorkspace,renderWorkspace,handleWorkspace,submitWorkspace} from '../frontend/src/workspace.js';
 import {collectMemorySnapshot} from '../frontend/src/personal.js';
+import {createTaskIntakeMessage} from '../frontend/src/task-intake.js';
+import {registerSkillOffer} from '../frontend/src/skill-discovery-model.js';
+import {draftProject,assignDraftProject} from '../frontend/src/sidebar-layout.js';
 import {initTaskFiles, applyAnnotations, handleViewer} from '../frontend/src/viewer.js';
 import {handleChat, inputChat, tickTasks, renderHome, renderChat, sendMessage} from '../frontend/src/chat.js';
 import * as model from '../frontend/src/team-model.js';
@@ -58,8 +61,8 @@ function wireRealTaskCreation(ctx) {
   const start=source.indexOf('function startTask('),end=source.indexOf('\nfunction continueTask(',start);
   assert.ok(start>=0&&end>start,'task-creation boundary must remain discoverable');
   ctx.startTask=runInNewContext('('+source.slice(start,end)+')',{
-    ...model,state:ctx.state,newTask,uid,structuredClone,
-    collectMemorySnapshot,toast:text=>ctx.toast(text),save:()=>ctx.save(),go:route=>ctx.go(route),
+    ...model,state:ctx.state,ui:ctx.ui,newTask,uid,structuredClone,
+    collectMemorySnapshot,draftProject,assignDraftProject,registerSkillOffer,createTaskIntakeMessage,toast:text=>ctx.toast(text),save:()=>ctx.save(),go:route=>ctx.go(route),
   });
   return ctx;
 }
